@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="img/kaz-symbole-blanc.png">
+<title>Kaz Templates</title>
+<meta name="description" content="Fichiers Excel en FCFA pour gérer ton argent, ta boutique et ta tontine, même sur téléphone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap">
+<style>
+/* Mise en page : un site sombre "monde Kaz" ; la maison 3D en héros, puis des démos qu'on touche, puis les 15 fichiers. */
+:root{
+  --nuit:#0E0E0E; --nuit2:#151917; --ligne:#26302B; --coton:#F6F1E7; --vert:#2EE59D; --vertf:#14B573;
+  --mangue:#F2994A; --foret:#0E3B2E; --texte:#F6F1E7; --doux:#AEB9B3; --encre:#141A17; --rouge:#E5483A;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif; --body:Figtree,"Segoe UI",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--nuit);color:var(--texte);font-family:var(--body);font-size:17px;line-height:1.55;overflow-x:hidden}
+a{color:var(--vert)}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.015em}
+.eyebrow{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:10px;font:inherit;font-weight:800;text-decoration:none;border-radius:14px;padding:15px 24px;border:2px solid transparent;cursor:pointer;transition:transform .15s ease, filter .15s ease, background .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+.btn:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--mangue);outline-offset:3px}
+.btn-vert{background:var(--vert);color:var(--nuit)}
+.btn-ghost{background:transparent;color:var(--texte);border-color:#3A4A42}
+.btn-nuit{background:var(--nuit);color:#fff}
+
+/* en-tête */
+header{position:fixed;inset:0 0 auto 0;z-index:30;padding-top:env(safe-area-inset-top,0px);transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+header.solid{background:rgba(14,14,14,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-color:var(--ligne)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.nav img{height:38px;width:auto}
+.nav-links{display:flex;align-items:center;gap:22px;font-weight:700;font-size:15px}
+.nav-links a{color:var(--texte);text-decoration:none}
+.nav-links a:hover{color:var(--vert)}
+@media (max-width:760px){.nav-links .hide-m{display:none}}
+
+/* héros 3D */
+.hero{position:relative;min-height:min(100svh,920px);display:flex;align-items:center;overflow:hidden;
+  background:radial-gradient(900px 600px at 78% 30%,#12503A 0%,rgba(14,14,14,0) 65%),radial-gradient(600px 400px at 10% 100%,#0F2E22 0%,rgba(14,14,14,0) 70%),var(--nuit)}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:center;padding-block:120px 80px;pointer-events:none}
+.hero-text{display:flex;flex-direction:column;gap:22px;pointer-events:auto}
+.pill{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;border:1px solid #2B3A33;background:rgba(14,14,14,.5);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:700;color:#BFE9D6}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--vert);box-shadow:0 0 0 0 rgba(46,229,157,.6);animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(46,229,157,.6)}80%,100%{box-shadow:0 0 0 12px rgba(46,229,157,0)}}
+.hero h1{font-weight:800;font-size:clamp(42px,6.4vw,78px);line-height:.98}
+.hero h1 .vert{color:var(--vert)}
+.hero p.lead{margin:0;font-size:clamp(18px,2vw,21px);color:#C9D2CD;max-width:31em}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:15px;font-weight:600;color:var(--doux)}
+.trust span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:2px;background:var(--vert);margin-right:8px;transform:translateY(-2px)}
+.hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;font-size:13px;color:var(--doux);letter-spacing:.08em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hint b{width:2px;height:28px;background:linear-gradient(var(--vert),transparent);animation:drop 1.8s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.fallback{position:absolute;right:8%;top:50%;transform:translateY(-50%);width:min(40vw,420px);opacity:.9}
+@media (max-width:900px){
+  .hero{align-items:flex-start}
+  .hero-grid{grid-template-columns:1fr;padding-block:96px 48px}
+  .hero-text{padding-top:min(58vw,360px)}
+  .fallback{top:110px;transform:none;right:50%;margin-right:calc(min(60vw,300px)/-2);width:min(60vw,300px)}
+}
+
+/* bande "fait pour" qui défile */
+.marquee{border-block:1px solid var(--ligne);background:var(--nuit2);overflow:hidden;padding-block:16px}
+.track{display:flex;gap:14px;width:max-content;animation:defile 38s linear infinite}
+.marquee:hover .track{animation-play-state:paused}
+.chip{border:1px solid #2B3A33;border-radius:999px;padding:8px 16px;font-weight:700;font-size:15px;white-space:nowrap}
+.chip.v{border-color:var(--vert);color:var(--vert)}
+@keyframes defile{to{transform:translateX(-50%)}}
+
+section{position:relative}
+.sec{padding-block:96px}
+.sec-head{display:flex;flex-direction:column;gap:12px;max-width:680px;margin-bottom:36px}
+.sec-head h2{font-weight:800;font-size:clamp(32px,4.6vw,52px);line-height:1.04}
+.sec-head p{margin:0;color:var(--doux);font-size:18px}
+
+/* révélation au défilement (visible par défaut, animé si JS) */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+/* démo caisse */
+.demo{background:var(--coton);color:var(--encre)}
+.demo .sec-head p{color:#56615B}
+.demo-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:28px;align-items:stretch}
+.sheet{background:#fff;border-radius:22px;box-shadow:0 30px 60px rgba(20,26,23,.12);overflow:hidden;min-width:0}
+.sheet-bar{background:var(--foret);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.sheet-bar i{width:20px;height:20px;border-radius:5px;background:#1E8E3E;display:inline-block}
+.sheet-bar span{margin-left:auto;font-weight:600;font-size:13px;color:#BFE9D6}
+.rows{display:grid}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 190px;border-bottom:1px solid #EEE7DA}
+.row label,.row .lab{padding:14px 18px;font-weight:700;font-size:16px;color:#3A443E;display:flex;align-items:center}
+.cell{display:flex;align-items:center;justify-content:flex-end;padding:0 14px;font-variant-numeric:tabular-nums;font-weight:800;font-size:18px}
+.cell.in{background:#fff;border-left:1px solid #EEE7DA}
+.cell.in input{width:100%;border:0;background:transparent;text-align:right;font:inherit;color:var(--encre);padding:12px 0}
+.cell.in:focus-within{box-shadow:inset 0 0 0 3px var(--mangue)}
+.cell.calc{background:#DDF6EA;color:#0E3B2E;border-left:1px solid #CBEBDC}
+.row.big .lab{font-size:18px;color:var(--encre)}
+.ecart{transition:background .3s,color .3s}
+.ecart.ok{background:#2EE59D;color:#0E0E0E}
+.ecart.bad{background:#F9D5D0;color:#B3261E}
+.ecart.over{background:#FCEBC4;color:#8A5A00}
+.verdict{border-radius:22px;padding:30px;display:flex;flex-direction:column;gap:14px;justify-content:center;transition:background .35s,color .35s;min-width:0}
+.verdict.ok{background:var(--nuit);color:#fff}
+.verdict.bad{background:#B3261E;color:#fff}
+.verdict.over{background:#8A5A00;color:#fff}
+.verdict .big{font-family:var(--display);font-weight:800;font-size:clamp(40px,5vw,64px);line-height:1;font-variant-numeric:tabular-nums}
+.verdict p{margin:0;font-size:18px}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+@media (max-width:860px){.demo-grid{grid-template-columns:1fr}.row{grid-template-columns:minmax(0,1fr) 150px}}
+
+/* défi : grille à cliquer */
+.defi-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+.cases{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;perspective:800px}
+.case{aspect-ratio:1;border-radius:14px;border:1px solid #2E3A34;background:#161B18;color:var(--doux);font:inherit;font-weight:800;font-size:15px;cursor:pointer;transition:transform .45s cubic-bezier(.2,.8,.2,1),background .3s,color .3s;transform-style:preserve-3d}
+.case:hover{border-color:var(--vert)}
+.case.on{background:var(--vert);color:var(--nuit);transform:rotateY(180deg) scale(1.02)}
+.case.on span{display:inline-block;transform:rotateY(180deg)}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.stat{background:#161B18;border:1px solid var(--ligne);border-radius:16px;padding:16px}
+.stat small{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--doux);font-weight:800}
+.stat b{font-family:var(--display);font-size:32px;font-variant-numeric:tabular-nums}
+.stat.m b{color:var(--mangue)} .stat.v b{color:var(--vert)}
+.amount{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px;color:var(--doux);font-weight:600}
+.amount input{width:120px;background:#161B18;border:1px solid var(--ligne);color:var(--texte);border-radius:10px;padding:10px 12px;font:inherit;font-weight:800;text-align:right}
+@media (max-width:860px){.defi-grid{grid-template-columns:1fr}}
+
+/* produits */
+.shop{background:var(--coton);color:var(--encre)}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.tab{font:inherit;font-weight:800;font-size:15px;padding:10px 16px;border-radius:999px;border:2px solid #D9D1C2;background:transparent;color:var(--encre);cursor:pointer;transition:all .2s}
+.tab:hover{border-color:var(--encre)}
+.tab[aria-pressed="true"]{background:var(--encre);border-color:var(--encre);color:#fff}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;perspective:1200px}
+.card{background:#fff;border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(20,26,23,.06),0 14px 32px rgba(20,26,23,.08);transform-style:preserve-3d;transition:transform .25s ease,box-shadow .25s ease;will-change:transform;min-width:0}
+.card:hover{box-shadow:0 24px 50px rgba(20,26,23,.18)}
+.card .img{position:relative;overflow:hidden;background:var(--nuit)}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;transition:transform .5s ease}
+.card:hover img{transform:scale(1.05)}
+.card .glare{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.28),rgba(255,255,255,0) 45%);opacity:0;transition:opacity .3s}
+.card:hover .glare{opacity:1}
+.card .body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex-grow:1}
+.card h3{font-weight:800;font-size:22px;line-height:1.15}
+.card p{margin:0;font-size:15px;line-height:1.45;color:#4F5A54;flex-grow:1}
+.card .foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.price{font-family:var(--display);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.price.free{color:var(--vertf)}
+.card .btn{padding:11px 16px;font-size:15px;border-radius:12px}
+.card[hidden]{display:none}
+@media (max-width:560px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .card .body{padding:12px;gap:8px}
+  .card h3{font-size:17px}
+  .card p{font-size:13px}
+  .card .foot{flex-direction:column;align-items:stretch;gap:8px}
+  .price{font-size:18px}
+  .card .btn{justify-content:center;padding:10px}
+}
+
+/* étapes */
+.steps{background:var(--foret)}
+.steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;counter-reset:s}
+.steps li{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:12px}
+.steps li::before{counter-increment:s;content:counter(s);font-family:var(--display);font-weight:800;font-size:46px;line-height:1;color:var(--vert)}
+.steps h3{font-size:22px;font-weight:800}
+.steps p{margin:0;color:#C7D8CF}
+@media (max-width:860px){.steps ol{grid-template-columns:1fr}}
+
+/* reçu + promesse */
+.recu{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px}
+.files{display:flex;flex-direction:column;gap:12px;list-style:none;margin:0;padding:0}
+.files li{display:flex;gap:14px;align-items:flex-start;background:var(--nuit2);border:1px solid var(--ligne);border-radius:16px;padding:16px 18px}
+.files b.x{color:var(--vert);font-weight:800;min-width:48px}
+.files b.p{color:var(--mangue);font-weight:800;min-width:48px}
+.promise{background:var(--vert);color:var(--nuit);border-radius:28px;padding:34px;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.promise p.q{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(24px,2.6vw,30px);line-height:1.15}
+@media (max-width:860px){.recu{grid-template-columns:1fr}}
+
+/* questions */
+.faq{background:var(--coton);color:var(--encre)}
+.faq .list{max-width:860px;display:flex;flex-direction:column;gap:10px}
+details{background:#fff;border-radius:16px;overflow:hidden}
+summary{list-style:none;cursor:pointer;padding:20px 22px;font-weight:800;font-size:18px;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--vertf);font-size:24px;line-height:1;transition:transform .25s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{margin:0;padding:0 22px 20px;color:#4F5A54}
+
+.final{text-align:center;background:radial-gradient(700px 400px at 50% 110%,#14563A 0%,rgba(14,14,14,0) 70%),var(--nuit)}
+.final .inner{display:flex;flex-direction:column;align-items:center;gap:20px}
+.final h2{font-weight:800;font-size:clamp(36px,5.4vw,60px);line-height:1.03;max-width:15em}
+.final p{margin:0;color:#C9D2CD;max-width:32em;font-size:19px}
+footer{border-top:1px solid var(--ligne);background:#0A0A0A}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;padding-block:30px;color:var(--doux);font-size:15px}
+.foot img{height:30px;width:auto}
+
+/* bouton aperçu sur les cartes */
+.pv-open{position:absolute;left:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:800;font-size:14px;background:rgba(14,14,14,.82);color:#fff;border:1px solid rgba(46,229,157,.6);border-radius:999px;padding:9px 14px;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background .2s,transform .2s}
+.pv-open:hover{background:var(--vert);color:var(--nuit);transform:translateY(-2px)}
+.pv-open svg{width:18px;height:18px}
+@media (max-width:560px){.pv-open{left:8px;bottom:8px;font-size:12px;padding:7px 10px}}
+
+/* fenêtre d'aperçu 3D */
+.pv{position:fixed;inset:0;z-index:60;background:rgba(5,8,6,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+.pv-panel{width:min(1080px,100%);max-height:100%;background:radial-gradient(700px 420px at 50% 0%,#12503A 0%,rgba(14,14,14,0) 70%),#0E0E0E;border:1px solid var(--ligne);border-radius:26px;display:flex;flex-direction:column;overflow:hidden;animation:pvin .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes pvin{from{opacity:0;transform:translateY(24px) scale(.98)}}
+.pv-head{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid var(--ligne)}
+.pv-head h2{font-size:clamp(20px,2.6vw,28px);font-weight:800}
+.pv-head .price{color:var(--mangue);margin-left:auto}
+.pv-x{width:44px;height:44px;border-radius:12px;border:1px solid var(--ligne);background:#151917;color:#fff;font-size:24px;cursor:pointer;flex:none}
+.pv-stage{position:relative;height:min(58vh,560px);min-height:300px}
+#pv-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+#pv-canvas:active{cursor:grabbing}
+.pv-flat{position:absolute;inset:0;overflow:auto;padding:16px;background:#0B0D0C}
+.pv-flat img{max-width:none;width:max(100%,900px);border-radius:12px}
+.pv-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);font-size:13px;color:var(--doux);background:rgba(14,14,14,.7);border-radius:999px;padding:6px 12px;pointer-events:none;white-space:nowrap}
+.pv-tabs{display:flex;gap:8px;overflow-x:auto;padding:14px 18px;border-top:1px solid var(--ligne);scrollbar-width:thin}
+.pv-tab{flex:none;font:inherit;font-weight:700;font-size:14px;padding:9px 14px;border-radius:999px;border:1px solid #2E3A34;background:#151917;color:var(--texte);cursor:pointer}
+.pv-tab[aria-pressed="true"]{background:var(--vert);border-color:var(--vert);color:var(--nuit)}
+.pv-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:0 18px 18px}
+.pv-foot p{margin:0;color:var(--doux);font-size:14px;flex:1 1 260px}
+@media (max-width:560px){.pv{padding:0}.pv-panel{border-radius:0;height:100%}.pv-stage{height:auto;flex:1}}
+
+.wa{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;align-items:center;gap:10px;background:#25D366;color:#0E0E0E;font-weight:800;text-decoration:none;border-radius:999px;padding:12px 18px 12px 14px;box-shadow:0 14px 30px rgba(0,0,0,.4);transition:transform .2s}
+.wa:hover{transform:translateY(-3px)}
+.wa svg{width:22px;height:22px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.js .rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+
+<header id="top">
+  <div class="wrap nav">
+    <a href="#accueil" aria-label="Kaz Templates, accueil"><img src="img/logo-kaz.png" alt="Kaz Templates"></a>
+    <nav class="nav-links" aria-label="Menu principal">
+      <a class="hide-m" href="#essaie">Essaie</a>
+      <a class="hide-m" href="#fichiers">Les fichiers</a>
+      <a class="hide-m" href="#questions">Questions</a>
+      <a class="btn btn-vert" style="padding:10px 16px;border-radius:999px" href="https://qcquzwdj.mychariow.shop/defi-30-jours-zero-gaspi">Défi gratuit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="accueil">
+<section class="hero" aria-label="Présentation">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <img class="fallback" id="fallback" src="img/kaz-symbole-blanc.png" alt="" hidden>
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <span class="pill"><i></i>Fichiers Excel en FCFA · marchent sur téléphone</span>
+      <h1>Ton argent,<br>rangé <span class="vert">case par case.</span></h1>
+      <p class="lead">Budget, caisse, stock, tontine, mariage, chantier… Tu écris dans les cases blanches, tout le reste se calcule tout seul.</p>
+      <div class="ctas">
+        <a class="btn btn-vert" href="#fichiers">Voir les 15 fichiers</a>
+        <button class="btn btn-ghost" type="button" id="hero-3d">Voir un fichier en 3D</button>
+      </div>
+      <div class="trust"><span>Wave, Orange Money, MTN, Moov</span><span>Téléchargement immédiat</span><span>Aide WhatsApp</span></div>
+    </div>
+    <div></div>
+  </div>
+  <div class="hint" aria-hidden="true">Bouge la maison<b></b></div>
+</section>
+
+<div class="marquee" aria-label="Fait pour">
+  <div class="track">
+    <span class="chip v">Fait pour</span><span class="chip">Commerçants</span><span class="chip">Vendeurs WhatsApp et TikTok</span><span class="chip">Maquis et restos</span><span class="chip">Tontines</span><span class="chip">Associations</span><span class="chip">Familles</span><span class="chip">Futurs mariés</span><span class="chip">Diaspora qui construit</span><span class="chip">Propriétaires</span>
+    <span class="chip v" aria-hidden="true">Fait pour</span><span class="chip" aria-hidden="true">Commerçants</span><span class="chip" aria-hidden="true">Vendeurs WhatsApp et TikTok</span><span class="chip" aria-hidden="true">Maquis et restos</span><span class="chip" aria-hidden="true">Tontines</span><span class="chip" aria-hidden="true">Associations</span><span class="chip" aria-hidden="true">Familles</span><span class="chip" aria-hidden="true">Futurs mariés</span><span class="chip" aria-hidden="true">Diaspora qui construit</span><span class="chip" aria-hidden="true">Propriétaires</span>
+  </div>
+</div>
+
+<!-- Démo 1 : la caisse -->
+<section class="demo sec" id="essaie">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow" style="color:#D2702A">Essaie ici · Ma caisse du jour</span>
+      <h2>Change un chiffre. Regarde le fichier calculer.</h2>
+      <p>C'est exactement comme ça dans le fichier : tu écris dans les cases blanches, les cases vertes se calculent toutes seules.</p>
+    </div>
+    <div class="demo-grid">
+      <div class="sheet rv">
+        <div class="sheet-bar"><i></i>Ma caisse du jour.xlsx<span>Ce soir · 09/10</span></div>
+        <div class="rows">
+          <div class="row"><label for="c-fond">Fond de caisse du matin</label><div class="cell in"><input id="c-fond" inputmode="numeric" value="195 500"></div></div>
+          <div class="row"><label for="c-esp">Ventes en espèces</label><div class="cell in"><input id="c-esp" inputmode="numeric" value="42 500"></div></div>
+          <div class="row"><label for="c-mm">Ventes Mobile Money</label><div class="cell in"><input id="c-mm" inputmode="numeric" value="8 500"></div></div>
+          <div class="row"><label for="c-sort">Sorties (achats, frais)</label><div class="cell in"><input id="c-sort" inputmode="numeric" value="30 000"></div></div>
+          <div class="row"><label for="c-ret">Retrait du patron</label><div class="cell in"><input id="c-ret" inputmode="numeric" value="60 000"></div></div>
+          <div class="row big"><span class="lab">Caisse attendue</span><div class="cell calc" id="c-att">148 000 F</div></div>
+          <div class="row"><label for="c-compte">Compté le soir</label><div class="cell in"><input id="c-compte" inputmode="numeric" value="146 000"></div></div>
+          <div class="row big"><span class="lab">Écart</span><div class="cell calc ecart" id="c-ecart">−2 000 F</div></div>
+        </div>
+      </div>
+      <div class="verdict rv" id="verdict" aria-live="polite">
+        <span class="eyebrow" id="v-eye">Le verdict</span>
+        <span class="big" id="v-big">−2 000 F</span>
+        <p id="v-txt">Il manque de l'argent dans la caisse.</p>
+        <a class="btn btn-vert" href="https://qcquzwdj.mychariow.shop/caisse-du-jour" style="align-self:flex-start">Ma caisse du jour · 3 000 F</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Démo 2 : le défi -->
+<section class="sec" id="defi">
+  <div class="wrap defi-grid">
+    <div class="rv">
+      <div class="sec-head" style="margin-bottom:18px">
+        <span class="eyebrow" style="color:var(--vert)">Essaie ici · Défi 30 jours zéro gaspi</span>
+        <h2>Touche les jours où tu as évité une petite dépense.</h2>
+        <p>Sucrerie, unités en trop, taxi… Chaque jour réussi devient vert, et ton argent gardé grimpe.</p>
+      </div>
+      <div class="amount"><label for="par-jour">J'évite en moyenne</label><input id="par-jour" inputmode="numeric" value="1 000"><span>F par jour</span></div>
+      <div class="stats">
+        <div class="stat v"><small>Jours réussis</small><b id="d-n">0 / 30</b></div>
+        <div class="stat"><small>Argent gardé</small><b id="d-garde">0 F</b></div>
+      </div>
+      <div class="stat m" style="margin-top:12px"><small>À ce rythme, sur un an</small><b id="d-an">0 F</b></div>
+      <a class="btn btn-vert" style="margin-top:18px" href="https://qcquzwdj.mychariow.shop/defi-30-jours-zero-gaspi">Prendre le défi · gratuit</a>
+    </div>
+    <div class="cases rv" id="cases" role="group" aria-label="Les 30 jours du défi"></div>
+  </div>
+</section>
+
+<!-- Les fichiers -->
+<section class="shop sec" id="fichiers">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow" style="color:#D2702A">Les 15 fichiers</span>
+      <h2>Un fichier pour chaque problème d'argent</h2>
+    </div>
+    <div class="tabs" role="group" aria-label="Filtrer les fichiers">
+      <button class="tab" type="button" data-cat="tous" aria-pressed="true">Tous</button>
+      <button class="tab" type="button" data-cat="commerce" aria-pressed="false">Mon commerce</button>
+      <button class="tab" type="button" data-cat="perso" aria-pressed="false">Mon argent</button>
+      <button class="tab" type="button" data-cat="groupe" aria-pressed="false">En groupe</button>
+      <button class="tab" type="button" data-cat="projets" aria-pressed="false">Mes projets</button>
+    </div>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<section class="steps sec">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow" style="color:var(--vert)">Comment ça marche</span>
+      <h2>Prêt en 3 étapes, même sans connaître Excel</h2>
+    </div>
+    <ol>
+      <li class="rv"><h3>Choisis ton fichier</h3><p>Budget, caisse, tontine… Chaque fichier règle un problème précis.</p></li>
+      <li class="rv"><h3>Paie avec ton téléphone</h3><p>Wave, Orange Money, MTN MoMo ou Moov Money. Paiement sécurisé.</p></li>
+      <li class="rv"><h3>Télécharge et remplis</h3><p>Le fichier avec un exemple, la version vierge et le guide pour l'ouvrir sur ton téléphone. Tout de suite.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap recu">
+    <div class="rv">
+      <div class="sec-head" style="margin-bottom:20px">
+        <span class="eyebrow" style="color:var(--mangue)">Dans chaque achat</span>
+        <h2>Tu reçois 3 fichiers</h2>
+      </div>
+      <ul class="files">
+        <li><b class="x">.xlsx</b><span>Le fichier <strong>avec un exemple rempli</strong>, pour voir comment tout marche</span></li>
+        <li><b class="x">.xlsx</b><span>La <strong>version vierge</strong>, prête à remplir avec tes chiffres</span></li>
+        <li><b class="p">.pdf</b><span>Le guide <strong>« Ouvrir ton fichier sur ton téléphone »</strong></span></li>
+      </ul>
+    </div>
+    <div class="promise rv">
+      <span class="eyebrow">Notre promesse</span>
+      <p class="q">Si le fichier ne marche pas chez toi et qu'on n'arrive pas à régler le problème ensemble, on te rembourse.</p>
+      <p style="margin:0;font-weight:700">Une question ? WhatsApp 07 16 96 52 12</p>
+    </div>
+  </div>
+</section>
+
+<section class="faq sec" id="questions">
+  <div class="wrap">
+    <div class="sec-head rv"><h2>Questions fréquentes</h2></div>
+    <div class="list">
+      <details open><summary>Je ne connais pas Excel, je vais y arriver ?</summary><p>Oui. Tu écris seulement dans les cases blanches, comme dans un cahier. Tout le reste se calcule tout seul, et un mode d'emploi est inclus.</p></details>
+      <details><summary>Ça marche sur téléphone ?</summary><p>Oui, avec l'application Google Sheets, gratuite. Le guide fourni t'explique comment ouvrir ton fichier en 2 minutes.</p></details>
+      <details><summary>Comment je paie ?</summary><p>Avec Wave, Orange Money, MTN MoMo ou Moov Money, directement depuis ton téléphone.</p></details>
+      <details><summary>Quand est-ce que je reçois le fichier ?</summary><p>Tout de suite après le paiement : le téléchargement est immédiat.</p></details>
+      <details><summary>Et si le fichier ne marche pas chez moi ?</summary><p>Écris-nous sur WhatsApp au 07 16 96 52 12 avec une capture d'écran. On t'aide jusqu'à ce que ça marche, et si on n'y arrive vraiment pas, on te rembourse.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final sec">
+  <div class="wrap inner rv">
+    <h2>Commence aujourd'hui, <span style="color:var(--vert)">gratuitement.</span></h2>
+    <p>Le défi 30 jours zéro gaspi te montre combien tes petites dépenses te coûtent. 0 F, téléchargement immédiat.</p>
+    <a class="btn btn-vert" href="https://qcquzwdj.mychariow.shop/defi-30-jours-zero-gaspi">Je prends le défi gratuit</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <img src="img/logo-kaz.png" alt="Kaz Templates">
+    <span>Chacun sa case · Abidjan, Côte d'Ivoire</span>
+    <span>WhatsApp 07 16 96 52 12</span>
+  </div>
+</footer>
+
+<div class="pv" id="pv" hidden role="dialog" aria-modal="true" aria-labelledby="pv-title">
+  <div class="pv-panel">
+    <div class="pv-head">
+      <h2 id="pv-title">Aperçu</h2>
+      <span class="price" id="pv-price"></span>
+      <button class="pv-x" id="pv-x" type="button" aria-label="Fermer l'aperçu">×</button>
+    </div>
+    <div class="pv-stage">
+      <canvas id="pv-canvas" aria-label="Le fichier affiché sur un ordinateur en 3D. Glisse pour le faire tourner."></canvas>
+      <div class="pv-flat" id="pv-flat" hidden><img id="pv-img" alt=""></div>
+      <span class="pv-hint" id="pv-hint">Glisse pour tourner · touche un onglet</span>
+    </div>
+    <div class="pv-tabs" id="pv-tabs" role="group" aria-label="Les onglets du fichier"></div>
+    <div class="pv-foot">
+      <p>Ce sont les vrais onglets du fichier, avec l'exemple rempli. Tu reçois aussi la version vierge.</p>
+      <button class="btn btn-ghost" id="pv-mode" type="button" style="padding:11px 16px">Voir en grand</button>
+      <a class="btn btn-vert" id="pv-buy" href="#" style="padding:11px 18px">Acheter</a>
+    </div>
+  </div>
+</div>
+
+<a class="wa" href="https://wa.me/2250716965212" aria-label="Écrire sur WhatsApp au 07 16 96 52 12">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21l1.6-4.6A8.5 8.5 0 1 1 8 19.6L3 21z"/><path d="M9 9.5c.4 2 2 3.8 4 4.5l1.2-1.2 2 .8v1.6c-4 .5-8-3.5-7.5-7.5h1.6l.8 2z"/></svg>
+  WhatsApp
+</a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+document.documentElement.classList.add('js');
+const fmt = n => (n < 0 ? '−' : '') + Math.abs(Math.round(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' F';
+const num = s => parseInt(String(s).replace(/[^\d]/g, ''), 10) || 0;
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* en-tête opaque après le héros */
+const head = document.getElementById('top');
+const onScroll = () => head.classList.toggle('solid', window.scrollY > 40);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+/* ---------- scène 3D : la maison Kaz ---------- */
+(function () {
+  const canvas = document.getElementById('scene');
+  let renderer;
+  try {
+    if (!window.THREE) throw new Error('three');
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  } catch (e) { document.getElementById('fallback').hidden = false; canvas.remove(); return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0e0e0e, 9, 22);
+  const cam = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
+  cam.position.set(0, 0.2, 12);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+  const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(4, 6, 8); scene.add(key);
+  const rim = new THREE.PointLight(0x2ee59d, 2.2, 14); rim.position.set(-3, 2, -3); scene.add(rim);
+  const warm = new THREE.PointLight(0xf2994a, 1.1, 14); warm.position.set(4, -3, 4); scene.add(warm);
+
+  // pièces du logo (unités : 1 = 100 px du logo d'origine)
+  const S = 1 / 100, cx = 512, cy = 493;
+  const P = (x, y) => new THREE.Vector2((x - cx) * S, (cy - y) * S);
+  function shape(pts) { const s = new THREE.Shape(); s.moveTo(pts[0].x, pts[0].y); for (let i = 1; i < pts.length; i++) s.lineTo(pts[i].x, pts[i].y); s.closePath(); return s; }
+  function rounded(x0, y0, x1, y1, rbl, rbr) {
+    const s = new THREE.Shape(); const a = P(x0, y0), b = P(x1, y1); const r = 0.06;
+    s.moveTo(a.x + r, a.y); s.lineTo(b.x - r, a.y); s.quadraticCurveTo(b.x, a.y, b.x, a.y - r);
+    s.lineTo(b.x, b.y + rbr); s.quadraticCurveTo(b.x, b.y, b.x - rbr, b.y);
+    s.lineTo(a.x + rbl, b.y); s.quadraticCurveTo(a.x, b.y, a.x, b.y + rbl);
+    s.lineTo(a.x, a.y - r); s.quadraticCurveTo(a.x, a.y, a.x + r, a.y); return s;
+  }
+  const ext = { depth: 0.9, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.06, bevelSegments: 4, curveSegments: 18 };
+  const coton = new THREE.MeshStandardMaterial({ color: 0xf6f1e7, roughness: 0.42, metalness: 0.05 });
+  const vert = new THREE.MeshStandardMaterial({ color: 0x2ee59d, roughness: 0.3, metalness: 0.1, emissive: 0x0b5e3c, emissiveIntensity: 0.55 });
+  const parts = [
+    { g: new THREE.ExtrudeGeometry(shape([P(290, 478), P(290, 421), P(494, 272), P(500, 280), P(500, 478)]), ext), m: coton, from: [-3, 3, 2] },
+    { g: new THREE.ExtrudeGeometry(shape([P(524, 280), P(530, 272), P(734, 421), P(734, 478), P(524, 478)]), ext), m: coton, from: [3, 3.4, -2] },
+    { g: new THREE.ExtrudeGeometry(rounded(290, 503, 500, 715, 0.34, 0.03), ext), m: coton, from: [-3.4, -3, -1] },
+    { g: new THREE.ExtrudeGeometry(rounded(524, 503, 734, 715, 0.03, 0.34), ext), m: vert, from: [3.2, -3.2, 2.5] },
+  ];
+  const house = new THREE.Group(); scene.add(house);
+  const meshes = parts.map(p => { p.g.translate(0, 0, -0.45); const m = new THREE.Mesh(p.g, p.m); m.userData.from = new THREE.Vector3(...p.from); m.userData.rot = (Math.random() - .5) * 2; house.add(m); return m; });
+
+  // petites cases flottantes avec des montants
+  function label(text, bg, fg) {
+    const c = document.createElement('canvas'); c.width = 256; c.height = 128; const x = c.getContext('2d');
+    x.fillStyle = bg; x.beginPath(); x.roundRect ? x.roundRect(0, 0, 256, 128, 26) : x.rect(0, 0, 256, 128); x.fill();
+    x.fillStyle = fg; x.font = '800 54px "Bricolage Grotesque", Figtree, sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(text, 128, 68);
+    const t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t;
+  }
+  const chips = [['25 000', '#ffffff', '#141a17'], ['+3 000 F', '#2ee59d', '#0e0e0e'], ['−2 000', '#f9d5d0', '#b3261e'], ['148 000', '#ffffff', '#141a17'], ['✓ payé', '#2ee59d', '#0e0e0e'], ['839 500', '#f2994a', '#0e0e0e'], ['15 000', '#fcebc4', '#8a5a00']];
+  const floaters = chips.map((c, i) => {
+    const mat = new THREE.MeshStandardMaterial({ map: label(...c), roughness: 0.5 });
+    const side = new THREE.MeshStandardMaterial({ color: new THREE.Color(c[1]), roughness: 0.6 });
+    const m = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.6, 0.12), [side, side, side, side, mat, side]);
+    const a = (i / chips.length) * Math.PI * 2; m.userData = { a, r: 3.2 + (i % 3) * 0.55, y: ((i % 4) - 1.5) * 0.9, s: 0.18 + (i % 3) * 0.05 };
+    scene.add(m); return m;
+  });
+
+  let w = 0, h = 0, offsetX = 0;
+  function size() {
+    w = canvas.clientWidth; h = canvas.clientHeight; renderer.setSize(w, h, false);
+    cam.aspect = w / h; cam.updateProjectionMatrix();
+    const mobile = w < 900; offsetX = mobile ? 0 : 2.6;
+    house.position.set(offsetX, mobile ? 2.3 : 0, 0); house.scale.setScalar(mobile ? 0.62 : 1);
+    cam.position.z = mobile ? 13 : 12;
+  }
+  addEventListener('resize', size); size();
+
+  let tx = 0, ty = 0, rx = 0, ry = 0, drag = null, spin = 0;
+  const pt = (e) => ({ x: (e.clientX / innerWidth) * 2 - 1, y: (e.clientY / innerHeight) * 2 - 1 });
+  addEventListener('pointermove', e => { const p = pt(e); tx = p.x * 0.6; ty = p.y * 0.35; if (drag) { spin += (e.clientX - drag) * 0.01; drag = e.clientX; } });
+  canvas.parentElement.addEventListener('pointerdown', e => { if (e.target.closest('a,button')) return; drag = e.clientX; });
+  addEventListener('pointerup', () => drag = null);
+  window.addEventListener('deviceorientation', e => { if (e.gamma != null) { tx = Math.max(-1, Math.min(1, e.gamma / 30)) * 0.6; ty = Math.max(-1, Math.min(1, (e.beta - 40) / 30)) * 0.3; } });
+
+  let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: 0 }).observe(canvas);
+  const t0 = performance.now();
+  function frame(now) {
+    requestAnimationFrame(frame);
+    if (!visible || window.pvOpen) return;
+    const t = (now - t0) / 1000;
+    const intro = reduce ? 1 : Math.min(1, t / 1.8), e = 1 - Math.pow(1 - intro, 3);
+    const sc = Math.min(1, window.scrollY / (innerHeight * 0.9));
+    meshes.forEach((m, i) => {
+      const f = m.userData.from; const k = (1 - e) + sc * 0.35;
+      m.position.set(f.x * k, f.y * k, f.z * k);
+      m.rotation.z = m.userData.rot * (1 - e) + sc * m.userData.rot * 0.2;
+    });
+    rx += (ty - rx) * 0.06; ry += (tx - ry) * 0.06; spin *= 0.95;
+    house.rotation.set(rx + Math.sin(t * 0.7) * 0.05, ry + spin + Math.sin(t * 0.4) * 0.25 + sc * 0.8, 0);
+    house.position.y = (w < 900 ? 2.3 : 0) + Math.sin(t * 1.1) * 0.08;
+    floaters.forEach((m, i) => {
+      const u = m.userData, a = u.a + t * u.s;
+      m.position.set(house.position.x + Math.cos(a) * u.r * house.scale.x, house.position.y + u.y * house.scale.x + Math.sin(t + i) * 0.15, Math.sin(a) * u.r * 0.6 * house.scale.x);
+      m.lookAt(cam.position); m.rotation.z += Math.sin(t * 0.8 + i) * 0.1;
+      const s = Math.min(1, Math.max(0, (t - 0.8 - i * 0.12) / 0.6)); m.scale.setScalar(house.scale.x * (reduce ? 1 : s));
+    });
+    renderer.render(scene, cam);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ---------- démo caisse ---------- */
+(function () {
+  const ids = ['fond', 'esp', 'mm', 'sort', 'ret', 'compte'];
+  const el = Object.fromEntries(ids.map(k => [k, document.getElementById('c-' + k)]));
+  const att = document.getElementById('c-att'), ec = document.getElementById('c-ecart');
+  const box = document.getElementById('verdict'), big = document.getElementById('v-big'), txt = document.getElementById('v-txt'), eye = document.getElementById('v-eye');
+  let last = null;
+  function calc() {
+    const v = Object.fromEntries(ids.map(k => [k, num(el[k].value)]));
+    const a = v.fond + v.esp - v.sort - v.ret; const d = v.compte - a;
+    att.textContent = fmt(a); ec.textContent = d === 0 ? '0 F' : (d > 0 ? '+' : '') + fmt(d);
+    const st = d === 0 ? 'ok' : d < 0 ? 'bad' : 'over';
+    ec.className = 'cell calc ecart ' + st; box.className = 'verdict rv in ' + st;
+    big.textContent = d === 0 ? 'Caisse juste' : (d > 0 ? '+' : '') + fmt(d);
+    eye.textContent = d === 0 ? 'Le verdict · vert' : d < 0 ? 'Le verdict · rouge' : 'Le verdict · jaune';
+    txt.textContent = d === 0 ? 'Bravo, il ne manque pas un franc.' : d < 0 ? "Il manque de l'argent dans la caisse. Tu le sais le soir même, pas à la fin du mois." : "Il y a plus d'argent que prévu : une vente n'a pas été notée ?";
+    if (last !== null && st !== last && st !== 'ok') { box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); }
+    last = st;
+  }
+  ids.forEach(k => {
+    el[k].addEventListener('input', calc);
+    el[k].addEventListener('blur', () => { el[k].value = num(el[k].value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); });
+  });
+  calc();
+})();
+
+/* ---------- démo défi ---------- */
+(function () {
+  const wrap = document.getElementById('cases'), inp = document.getElementById('par-jour');
+  const on = new Set([1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12]);
+  for (let d = 1; d <= 30; d++) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'case'; b.innerHTML = '<span>J' + d + '</span>';
+    b.setAttribute('aria-label', 'Jour ' + d); b.dataset.d = d;
+    b.addEventListener('click', () => { on.has(d) ? on.delete(d) : on.add(d); upd(); });
+    wrap.appendChild(b);
+  }
+  function anim(elm, to) {
+    const from = num(elm.dataset.v || 0); elm.dataset.v = to; const t0 = performance.now();
+    const step = (n) => { const p = Math.min(1, (n - t0) / 450); elm.textContent = fmt(from + (to - from) * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  function upd() {
+    [...wrap.children].forEach(b => { const a = on.has(+b.dataset.d); b.classList.toggle('on', a); b.setAttribute('aria-pressed', a); });
+    const n = on.size, pj = num(inp.value);
+    document.getElementById('d-n').textContent = n + ' / 30';
+    anim(document.getElementById('d-garde'), n * pj);
+    anim(document.getElementById('d-an'), n ? Math.round(n * pj / 30 * 365 / 500) * 500 : 0);
+  }
+  inp.addEventListener('input', upd);
+  upd();
+})();
+
+/* ---------- les fichiers ---------- */
+(function () {
+  const S = 'https://qcquzwdj.mychariow.shop/';
+  const P = [
+    ['Défi 30 jours zéro gaspi', 0, 'perso', 'Stoppe les petites dépenses en 30 jours. Ta grille devient verte.', 'defi-30-jours-zero-gaspi', 'c-defi-30-jours-zero-gaspi'],
+    ['Mon budget du mois', 3000, 'perso', 'Sache chaque jour combien il te reste, et mets de côté pour de vrai.', 'mon-budget-mensuel', 'c-mon-budget-du-mois'],
+    ['Défi 52 semaines', 1500, 'perso', "Un peu chaque semaine, jusqu'à 689 000 F en fin d'année.", 'defi-52-semaines', 'c-defi-52-semaines'],
+    ['Ma boutique', 5000, 'commerce', 'Stock qui baisse tout seul, alertes de rupture et vrai bénéfice.', 'gestion-de-stock-et-ventes', 'c-ma-boutique'],
+    ['Ma caisse du jour', 3000, 'commerce', 'Chaque soir, tu sais si la caisse est juste. Vert ou rouge.', 'caisse-du-jour', 'c-ma-caisse-du-jour'],
+    ['Mes clients à crédit', 3000, 'commerce', 'Qui te doit quoi, au franc près. Fini le cahier perdu.', 'carnet-dettes-clients', 'c-mes-clients-a-credit'],
+    ['Mon prix de vente', 2500, 'commerce', 'Le bon prix en 30 secondes, sans vendre à perte.', 'mon-prix-de-vente', 'c-mon-prix-de-vente'],
+    ['Mes ventes en ligne', 4000, 'commerce', 'Commandes WhatsApp et TikTok, livraisons, paiements, bénéfice.', 'mes-ventes-en-ligne', 'c-mes-ventes-en-ligne'],
+    ['Mes devis et factures', 3500, 'commerce', 'Devis et factures A4 à ton nom, total écrit en lettres.', 'devis-et-factures', 'c-mes-devis-et-factures'],
+    ['Mon maquis', 5000, 'commerce', 'Ventes, achats, charges et bénéfice de ton maquis chaque mois.', 'mon-maquis', 'c-mon-maquis'],
+    ['Ma tontine', 3000, 'groupe', 'Cotisations, retards en rouge et tours calculés. Fini la palabre.', 'gerer-ma-tontine', 'c-ma-tontine'],
+    ['Nos cotisations', 2000, 'groupe', 'Mariage, funérailles, association : chaque franc visible par tous.', 'nos-cotisations', 'c-nos-cotisations'],
+    ['Mon mariage', 6000, 'projets', 'Budget par cérémonie, invités, prestataires et compte à rebours.', 'mon-mariage', 'c-mon-mariage'],
+    ['Notre chantier au pays', 7500, 'projets', 'Chaque euro envoyé et chaque dépense du chantier, avec justificatifs.', 'notre-chantier-au-pays', 'c-notre-chantier-au-pays'],
+    ['Mes loyers', 4000, 'projets', "Locataires, paiements, retards et bilan de l'année.", 'mes-loyers', 'c-mes-loyers']
+  ];
+  const grid = document.getElementById('cards');
+  P.forEach(([n, p, c, l, slug, img]) => {
+    const a = document.createElement('article'); a.className = 'card rv'; a.dataset.cat = c;
+    a.innerHTML = `<div class="img"><img loading="lazy" src="img/${img}.jpg" alt=""><span class="glare"></span>
+      <button class="pv-open" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg>Aperçu 3D</button></div>
+      <div class="body"><h3></h3><p></p><div class="foot"><span class="price${p ? '' : ' free'}">${p ? fmt(p) : 'Gratuit'}</span>
+      <a class="btn btn-nuit" href="${S + slug}">${p ? 'Acheter' : 'Télécharger'}</a></div></div>`;
+    a.querySelector('h3').textContent = n; a.querySelector('p').textContent = l; a.querySelector('img').alt = n;
+    const ob = a.querySelector('.pv-open'); ob.setAttribute('aria-label', 'Aperçu 3D de ' + n);
+    ob.addEventListener('click', () => window.openPreview && window.openPreview({ name: n, price: p ? fmt(p) : 'Gratuit', folder: img.slice(2), url: S + slug, free: !p }, ob));
+    grid.appendChild(a);
+    if (!reduce && matchMedia('(hover: hover)').matches) {
+      a.addEventListener('pointermove', e => {
+        const r = a.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        a.style.transform = `rotateX(${(0.5 - y) * 10}deg) rotateY(${(x - 0.5) * 12}deg) translateY(-4px)`;
+        a.style.setProperty('--gx', x * 100 + '%'); a.style.setProperty('--gy', y * 100 + '%');
+      });
+      a.addEventListener('pointerleave', () => { a.style.transform = ''; });
+    }
+  });
+  document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-pressed', x === t));
+    const c = t.dataset.cat;
+    grid.querySelectorAll('.card').forEach(card => { card.hidden = !(c === 'tous' || card.dataset.cat === c); });
+  }));
+})();
+
+/* ---------- aperçu 3D d'un fichier ---------- */
+(function () {
+  const box = document.getElementById('pv'), cv = document.getElementById('pv-canvas'), tabs = document.getElementById('pv-tabs');
+  const flat = document.getElementById('pv-flat'), flatImg = document.getElementById('pv-img'), hint = document.getElementById('pv-hint');
+  const modeBtn = document.getElementById('pv-mode'), buy = document.getElementById('pv-buy');
+  let manifest = null, items = [], cur = 0, prod = null, opener = null, flatMode = false;
+  const loadManifest = () => manifest ? Promise.resolve(manifest) : fetch('apercu.json').then(r => r.json()).then(j => (manifest = j));
+
+  // ----- scène : un ordinateur portable -----
+  let three = null;
+  function build() {
+    if (three !== null) return three;
+    try { if (!window.THREE) throw 0; three = { r: new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }) }; }
+    catch (e) { three = false; return false; }
+    const T = three; T.r.setPixelRatio(Math.min(devicePixelRatio, 2));
+    T.scene = new THREE.Scene();
+    T.cam = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+    T.scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const d = new THREE.DirectionalLight(0xffffff, 0.9); d.position.set(3, 6, 6); T.scene.add(d);
+    const g = new THREE.PointLight(0x2ee59d, 1.6, 12); g.position.set(-3, 2, -2); T.scene.add(g);
+    const alu = new THREE.MeshStandardMaterial({ color: 0x2b2f2d, roughness: 0.35, metalness: 0.6 });
+    const dark = new THREE.MeshStandardMaterial({ color: 0x151817, roughness: 0.7, metalness: 0.2 });
+    T.group = new THREE.Group(); T.scene.add(T.group);
+    const base = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.1, 2.3), alu); base.position.y = 0.05; T.group.add(base);
+    const keys = new THREE.Mesh(new THREE.BoxGeometry(3.0, 0.012, 1.15), dark); keys.position.set(0, 0.106, -0.35); T.group.add(keys);
+    const pad = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.01, 0.6), new THREE.MeshStandardMaterial({ color: 0x353a37, roughness: 0.4, metalness: 0.5 })); pad.position.set(0, 0.105, 0.68); T.group.add(pad);
+    T.hinge = new THREE.Group(); T.hinge.position.set(0, 0.1, -1.13); T.group.add(T.hinge);
+    const lid = new THREE.Mesh(new THREE.BoxGeometry(3.4, 2.2, 0.07), alu); lid.position.set(0, 1.1, 0); T.hinge.add(lid);
+    const bezel = new THREE.Mesh(new THREE.PlaneGeometry(3.3, 2.1), dark); bezel.position.set(0, 1.1, 0.037); T.hinge.add(bezel);
+    T.tc = document.createElement('canvas'); T.tc.width = 2048; T.tc.height = 1280;
+    T.tex = new THREE.CanvasTexture(T.tc); T.tex.anisotropy = T.r.capabilities.getMaxAnisotropy();
+    T.screen = new THREE.Mesh(new THREE.PlaneGeometry(3.14, 1.96), new THREE.MeshBasicMaterial({ map: T.tex, color: 0xffffff }));
+    T.screen.position.set(0, 1.12, 0.039); T.hinge.add(T.screen);
+    const shadow = new THREE.Mesh(new THREE.CircleGeometry(2.6, 48), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 }));
+    shadow.rotation.x = -Math.PI / 2; shadow.scale.set(1, 0.55, 1); shadow.position.y = -0.01; T.group.add(shadow);
+    // glisser pour tourner
+    T.rotY = -0.35; T.vel = 0; T.drag = null; T.rotX = 0;
+    cv.addEventListener('pointerdown', e => { T.drag = { x: e.clientX, y: e.clientY }; cv.setPointerCapture(e.pointerId); hint.hidden = true; });
+    cv.addEventListener('pointermove', e => { if (!T.drag) return; const dx = e.clientX - T.drag.x, dy = e.clientY - T.drag.y; T.vel = dx * 0.008; T.rotY += dx * 0.008; T.rotX = Math.max(-0.25, Math.min(0.35, T.rotX + dy * 0.004)); T.drag = { x: e.clientX, y: e.clientY }; });
+    cv.addEventListener('pointerup', () => { T.drag = null; });
+    cv.addEventListener('pointercancel', () => { T.drag = null; });
+    return T;
+  }
+  function paint(T, img, title, tab) {
+    const c = T.tc.getContext('2d'), W = T.tc.width, H = T.tc.height;
+    c.fillStyle = '#FBF7F0'; c.fillRect(0, 0, W, H);
+    c.fillStyle = '#0E3B2E'; c.fillRect(0, 0, W, 86);
+    c.fillStyle = '#1E8E3E'; c.fillRect(28, 22, 42, 42);
+    c.fillStyle = '#FFFFFF'; c.font = '700 34px Figtree, sans-serif'; c.textBaseline = 'middle'; c.fillText(title + '.xlsx', 90, 44);
+    c.fillStyle = '#BFE9D6'; c.font = '600 30px Figtree, sans-serif'; c.textAlign = 'right'; c.fillText(tab, W - 30, 44); c.textAlign = 'left';
+    const top = 86, pad = 24, aw = W - pad * 2, ah = H - top - pad * 2;
+    const s = Math.min(aw / img.width, ah / img.height), w = img.width * s, h = img.height * s;
+    c.drawImage(img, (W - w) / 2, top + pad, w, h);
+    T.tex.needsUpdate = true;
+  }
+  const cache = {};
+  const loadImg = src => cache[src] || (cache[src] = new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }));
+
+  function show(i) {
+    cur = i; const it = items[i]; if (!it) return;
+    [...tabs.children].forEach((b, k) => b.setAttribute('aria-pressed', k === i));
+    const src = 'img/apercu/' + it[0];
+    flatImg.src = src; flatImg.alt = prod.name + ' · onglet ' + it[1];
+    const T = three;
+    if (T) {
+      T.flip = { t0: performance.now(), done: false };
+      loadImg(src).then(img => { T.pending = () => paint(T, img, prod.name, it[1]); });
+    }
+    if (items[i + 1]) loadImg('img/apercu/' + items[i + 1][0]);
+  }
+
+  function size() {
+    const T = three; if (!T) return;
+    const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+    T.r.setSize(w, h, false); T.cam.aspect = w / h; T.cam.updateProjectionMatrix();
+    const far = w / h < 0.9 ? 9.2 : 6.4; T.cam.position.set(0, 2.2, far); T.cam.lookAt(0, 0.95, 0);
+  }
+  addEventListener('resize', size);
+
+  function loop(now) {
+    if (!window.pvOpen) return;
+    requestAnimationFrame(loop);
+    const T = three; if (!T || flatMode) return;
+    const t = (now - T.t0) / 1000;
+    const open = reduce ? 1 : Math.min(1, t / 1.1), e = 1 - Math.pow(1 - open, 3);
+    T.hinge.rotation.x = 1.5 * (1 - e) - 0.22 * e;
+    if (!T.drag) { T.vel *= 0.94; T.rotY += T.vel; T.rotY += (Math.sin(t * 0.45) * 0.28 - 0.1 - T.rotY) * 0.01; }
+    T.group.rotation.set(T.rotX * 0.6, T.rotY, 0);
+    T.group.position.y = Math.sin(t * 1.2) * 0.03;
+    if (T.flip && !T.flip.done) {
+      const p = (now - T.flip.t0) / 380;
+      if (p >= 0.5 && T.pending) { T.pending(); T.pending = null; }
+      const k = p < 0.5 ? 1 - p * 2 : Math.min(1, (p - 0.5) * 2);
+      if (p >= 0.5 && !T.pending && p >= 1) T.flip.done = true;
+      T.screen.material.color.setScalar(0.15 + 0.85 * k);
+    } else if (T.pending) { T.pending(); T.pending = null; }
+    T.r.render(T.scene, T.cam);
+  }
+
+  function setMode(f) {
+    flatMode = f || !three;
+    flat.hidden = !flatMode; cv.hidden = flatMode; hint.hidden = flatMode;
+    modeBtn.textContent = flatMode ? 'Voir en 3D' : 'Voir en grand';
+    modeBtn.hidden = !three;
+  }
+  modeBtn.addEventListener('click', () => setMode(!flatMode));
+
+  function close() {
+    window.pvOpen = false; box.hidden = true; document.body.style.overflow = '';
+    removeEventListener('keydown', onKey); if (opener) opener.focus();
+  }
+  function onKey(e) {
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') show(Math.min(items.length - 1, cur + 1));
+    if (e.key === 'ArrowLeft') show(Math.max(0, cur - 1));
+  }
+  document.getElementById('pv-x').addEventListener('click', close);
+  box.addEventListener('click', e => { if (e.target === box) close(); });
+
+  window.openPreview = function (p, from) {
+    prod = p; opener = from;
+    document.getElementById('pv-title').textContent = p.name;
+    document.getElementById('pv-price').textContent = p.price;
+    buy.href = p.url; buy.textContent = p.free ? 'Télécharger gratuitement' : 'Acheter · ' + p.price;
+    box.hidden = false; document.body.style.overflow = 'hidden'; window.pvOpen = true;
+    addEventListener('keydown', onKey);
+    document.getElementById('pv-x').focus();
+    const T = build(); setMode(!T); hint.hidden = !T;
+    loadManifest().then(m => {
+      items = m[p.folder] || [];
+      tabs.innerHTML = '';
+      items.forEach((it, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pv-tab'; b.textContent = it[1]; b.addEventListener('click', () => show(i)); tabs.appendChild(b); });
+      const start = Math.min(items.length - 1, 2);
+      if (T) { T.t0 = performance.now(); T.rotY = -0.9; T.vel = 0.02; size(); }
+      show(start);
+      requestAnimationFrame(loop);
+    }).catch(() => { tabs.textContent = "L'aperçu n'a pas pu se charger. Réessaie dans un instant."; });
+  };
+})();
+
+document.getElementById('hero-3d').addEventListener('click', e => window.openPreview({ name: 'Mon budget du mois', price: '3 000 F', folder: 'mon-budget-du-mois', url: 'https://qcquzwdj.mychariow.shop/mon-budget-mensuel', free: false }, e.currentTarget));
+
+/* ---------- révélations ---------- */
+(function () {
+  const items = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window)) { items.forEach(i => i.classList.add('in')); return; }
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.12 });
+  items.forEach((i, k) => { i.style.transitionDelay = (k % 4) * 70 + 'ms'; io.observe(i); });
+  setTimeout(() => items.forEach(i => i.classList.add('in')), 4000);
+})();
+</script>
+
+</body>
+</html>
